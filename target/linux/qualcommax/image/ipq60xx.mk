@@ -45,7 +45,6 @@ define Device/glinet_gl-axt1800
 endef
 TARGET_DEVICES += glinet_gl-axt1800
 
-
 define Device/jdc_ax1800-pro
 	$(call Device/FitImage)
 	DEVICE_VENDOR := JD Cloud
@@ -60,3 +59,16 @@ define Device/jdc_ax1800-pro
 	IMAGE/factory.bin := append-kernel | pad-to 6144k |  append-rootfs | append-metadata
 endef
 TARGET_DEVICES += jdc_ax1800-pro
+
+define Device/xiaomi_ax1800
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := Xiaomi
+	DEVICE_MODEL := AX1800
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	SOC := ipq6018
+	DEVICE_PACKAGES := ipq-wifi-xiaomi_ax1800
+endef
+TARGET_DEVICES += xiaomi_ax1800
