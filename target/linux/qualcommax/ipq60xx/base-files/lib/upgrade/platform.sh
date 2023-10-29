@@ -35,7 +35,8 @@ platform_do_upgrade() {
 	case "$(board_name)" in
 	glinet,gl-axt1800|\
 	glinet,gl-ax1800|\
-	netgear,wax214)
+	netgear,wax214|\
+	xiaomi,ax1800)
 		nand_do_upgrade "$1"
 		;;
 	jdc,ax1800-pro)
