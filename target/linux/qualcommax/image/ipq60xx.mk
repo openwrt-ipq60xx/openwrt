@@ -30,6 +30,19 @@ define Device/netgear_wax214
 endef
 TARGET_DEVICES += netgear_wax214
 
+define Device/xiaomi_ax1800
+	$(call Device/FitImage)
+	$(call Device/UbiFit)
+	DEVICE_VENDOR := Xiaomi
+	DEVICE_MODEL := AX1800
+	BLOCKSIZE := 128k
+	PAGESIZE := 2048
+	DEVICE_DTS_CONFIG := config@cp03-c1
+	SOC := ipq6018
+	DEVICE_PACKAGES := ipq-wifi-xiaomi_ax1800
+endef
+TARGET_DEVICES += xiaomi_ax1800
+
 define Device/yuncore_fap650
     $(call Device/FitImage)
     $(call Device/UbiFit)
@@ -44,4 +57,3 @@ define Device/yuncore_fap650
     IMAGE/factory.ubin := append-ubi | qsdk-ipq-factory-nand
 endef
 TARGET_DEVICES += yuncore_fap650
-
