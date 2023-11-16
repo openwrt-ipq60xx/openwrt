@@ -450,7 +450,7 @@
 		};
 	};
 
-	dp1: dp1 {
+	dp1: dp1@3a001000 {
 		device_type = "network";
 		compatible = "qcom,nss-dp";
 		qcom,id = <1>;
@@ -461,7 +461,7 @@
 		status = "disabled";
 	};
 
-	dp2: dp2 {
+	dp2: dp2@3a001200 {
 		device_type = "network";
 		compatible = "qcom,nss-dp";
 		qcom,id = <2>;
@@ -472,7 +472,7 @@
 		status = "disabled";
 	};
 
-	dp3: dp3 {
+	dp3: dp3@3a001400 {
 		device_type = "network";
 		compatible = "qcom,nss-dp";
 		qcom,id = <3>;
@@ -483,7 +483,7 @@
 		status = "disabled";
 	};
 
-	dp4: dp4 {
+	dp4: dp4@3a001600 {
 		device_type = "network";
 		compatible = "qcom,nss-dp";
 		qcom,id = <4>;
@@ -494,7 +494,7 @@
 		status = "disabled";
 	};
 
-	dp5: dp5 {
+	dp5: dp5@3a001800 {
 		device_type = "network";
 		compatible = "qcom,nss-dp";
 		qcom,id = <5>;
