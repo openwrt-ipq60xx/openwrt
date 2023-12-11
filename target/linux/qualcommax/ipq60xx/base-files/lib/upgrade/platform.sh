@@ -34,6 +34,7 @@ EOF
 platform_do_upgrade() {
 	case "$(board_name)" in
 	netgear,wax214|\
+	redmi,ax5|\
 	xiaomi,ax1800)
 		nand_do_upgrade "$1"
 		;;
