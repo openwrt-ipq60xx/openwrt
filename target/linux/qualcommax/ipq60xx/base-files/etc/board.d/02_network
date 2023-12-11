@@ -29,6 +29,7 @@ ipq60xx_setup_interfaces()
 	yuncore,fap650)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3 lan4" "wan"
 		;;
+	redmi,ax5|\
 	xiaomi,ax1800)
 		ucidef_set_interfaces_lan_wan "lan1 lan2 lan3" "wan"
 		;;
