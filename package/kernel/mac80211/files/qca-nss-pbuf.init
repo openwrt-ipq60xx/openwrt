@@ -117,6 +117,7 @@ apply_nss_config() {
     edimax,cax1800 | \
     compex,wpq873 | \
     linksys,mx4200v1 | \
+    redmi,ax5 | \
     redmi,ax6 | \
     xiaomi,ax1800 | \
     xiaomi,ax3600 | \
