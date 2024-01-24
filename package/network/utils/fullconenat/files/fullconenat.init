@@ -1,0 +1,93 @@
+#!/bin/sh /etc/rc.common
+#
+# Copyright (C) 2022-2023 pexcn <pexcn97@gmail.com>
+#
+# This is free software, licensed under the GNU General Public License v3.
+# See /LICENSE for more information.
+#
+
+START=90
+STOP=10
+
+CONFIG=fullconenat
+SECTION=fullconenat
+
+_uci_get_bool() {
+  local val=$(uci -q get $CONFIG.@$SECTION[0].$1)
+  case $val in
+    1|on|true|yes|enabled) return 0;;
+  esac
+  return 1
+}
+
+_uci_get_string() {
+  uci -q get $CONFIG.@$SECTION[0].$1
+}
+
+is_enabled() {
+  _uci_get_bool enable
+}
+
+is_global_mode() {
+  _uci_get_string ip >/dev/null && return 1 || return 0
+}
+
+get_ip_list() {
+  _uci_get_string ip
+}
+
+is_need_reorder() {
+  local firewall_config="/etc/config/firewall"
+  grep 'config include' $firewall_config | tail -1 | grep -q 'fullconenat' && return 1 || return 0
+}
+
+reorder_rules() {
+  local penultimate=$(echo $(($(cat /etc/config/firewall | grep "^config " | wc -l) - 1)))
+  uci reorder firewall.fullconenat=$penultimate
+  uci commit firewall
+}
+
+get_insert_position() {
+  # https://github.com/openwrt/packages/blob/1431f62/net/miniupnpd/files/firewall.include#L22
+  iptables -t nat --line-numbers -nL "zone_wan_postrouting" | sed -ne '$s/[^0-9].*//p'
+}
+
+apply_fullconenat() {
+  # try avoid conflicting with nf_conntrack_netlink
+  # https://github.com/Chion82/netfilter-full-cone-nat/issues/14#issuecomment-393385630
+  # https://github.com/LGA1150/openwrt-fullconenat#workaround-for-conflicting-with-module-nf_conntrack_netlink
+  ! lsmod | grep -q nf_conntrack_netlink || rmmod nf_conntrack_netlink
+
+  # make sure does not exist Full-cone NAT rules
+  revoke_fullconenat
+
+  # must insert to zone_wan_postrouting chain as penultimate, the key is to insert before MASQUERADE
+  if is_global_mode; then
+    iptables -t nat -A zone_wan_prerouting -m comment --comment 'Full-cone NAT' -j FULLCONENAT
+    iptables -t nat -I zone_wan_postrouting $(get_insert_position) -m comment --comment 'Full-cone NAT' -j FULLCONENAT
+  else
+    iptables -t nat -A zone_wan_prerouting -m comment --comment 'Full-cone NAT' -j FULLCONENAT
+    for ip in $(get_ip_list); do
+      iptables -t nat -I zone_wan_postrouting $(get_insert_position) -s $ip -m comment --comment 'Full-cone NAT' -j FULLCONENAT
+    done
+  fi
+
+  # make sure the fullconenat rules will be executed last
+  ! is_need_reorder || reorder_rules
+}
+
+revoke_fullconenat() {
+  eval "$(iptables-save | grep 'Full-cone NAT' | sed 's/-A/iptables -t nat -D/')"
+}
+
+start() {
+  is_enabled && apply_fullconenat || revoke_fullconenat
+}
+
+stop() {
+  revoke_fullconenat
+}
+
+restart() {
+  start
+}
