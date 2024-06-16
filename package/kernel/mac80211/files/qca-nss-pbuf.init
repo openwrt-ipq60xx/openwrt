@@ -110,6 +110,9 @@ apply_nss_config() {
     # 512MB profile
     edimax,cax1800 | \
     compex,wpq873 | \
+    glinet,gl-ax1800 | \
+    glinet,gl-axt1800 | \
+    jdc,ax1800-pro | \
     linksys,mx4200v1 | \
     redmi,ax6 | \
     xiaomi,ax3600 | \
