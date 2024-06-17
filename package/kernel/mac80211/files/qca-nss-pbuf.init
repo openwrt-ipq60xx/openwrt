@@ -114,7 +114,10 @@ apply_nss_config() {
     glinet,gl-axt1800 | \
     jdc,ax1800-pro | \
     linksys,mx4200v1 | \
+    redmi,ax5 | \
+    redmi,ax5-jdcloud | \
     redmi,ax6 | \
+    xiaomi,ax1800 | \
     xiaomi,ax3600 | \
     zte,mf269 | \
     512m*)
